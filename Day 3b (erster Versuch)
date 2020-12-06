@@ -1,0 +1,128 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+//Läuft das Muster nach der vorgegebenen Regel ab, und fängt wieder vorne an, wenn er hinten "rausfällt"
+void walkThree(int *pos, int values){
+int temp=*pos;
+temp+=3;
+if(temp<=values){
+    *pos = temp;
+}
+else{
+*pos = temp-values;
+}
+}
+
+void walkOne(int *pos, int values){
+int temp=*pos;
+temp++;
+if(temp<=values){
+    *pos = temp;
+}
+else{
+*pos = temp-values;
+}
+}
+
+void walkFive(int *pos, int values){
+int temp=*pos;
+temp+=5;
+if(temp<=values){
+    *pos = temp;
+}
+else{
+*pos = temp-values;
+}
+}
+
+void walkSeven(int *pos, int values){
+int temp=*pos;
+temp+=7;
+if(temp<=values){
+    *pos = temp;
+}
+else{
+*pos = temp-values;
+}
+}
+
+void countTrees(int *trees){
+    int Zeile=1;
+    int posOne=0;
+    int posThree=-2;
+    int posFive=-4;
+    int posSeven=-6;
+    int posOneTwo=0;
+
+    int treesOne=0;
+    int treesThree=0;
+    int treesFive=0;
+    int treesSeven=0;
+    int treesOneTwo=0;
+    //läuft bei walk() immer drei Schritte, auch beim ersten mal
+    //int values=31;
+    int values=31;
+
+    FILE *in  = fopen("input1.txt", "r");
+     if (in == NULL)
+            {
+             printf("Fehler\n");
+              exit(-1); // must include stdlib.h
+            }
+
+char line[33];
+
+//Erste Zeile einlesen
+fgets(line, 33, in);
+//Da die erste Pos 1 ist wird die erste Zeile übersprungen
+//fgets(line, 13, in);
+
+    while (strcmp(line,"NULL")){
+        //printf("%s",line);
+        if(Zeile%2!=0){
+            walkOne(&posOneTwo,values);
+            if(line[posOneTwo-1]=='#'){
+            treesOneTwo++;
+            //printf("Gefunden in Zeile %d\n",Zeile);
+            }
+        }
+        walkOne(&posOne,values);
+        if(line[posOne-1]=='#'){
+        treesOne++;
+        }
+        walkThree(&posThree,values);
+        if(line[posThree-1]=='#'){
+        treesThree++;
+        }
+        walkFive(&posFive,values);
+        if(line[posFive-1]=='#'){
+        treesFive++;
+        }
+        walkSeven(&posSeven,values);
+        if(line[posSeven-1]=='#'){
+        treesSeven++;
+        }
+        Zeile++;
+//Nächste Zeile einlesen
+        fgets(line, 33, in);
+    }
+
+    fclose(in);
+    printf("One:%d\n", treesOne);
+    printf("Three:%d\n", treesThree);
+    printf("Five:%d\n", treesFive);
+    printf("Seven:%d\n", treesSeven);
+    printf("OneTwo:%d\n", treesOneTwo);
+    *trees = (treesOne*treesThree*treesFive*treesSeven*treesOneTwo);
+
+}
+
+
+int main(int argc , char *argv[])
+{
+    long trees=0;
+    countTrees(&trees);
+    printf("Besuchte Baeume: %ld",trees);
+    return 0;
+}
