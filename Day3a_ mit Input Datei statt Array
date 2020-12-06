@@ -1,0 +1,52 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+//Läuft das Muster nach der vorgegebenen Regel ab, und fängt wieder vorne an, wenn er hinten "rausfällt"
+void walk(int *pos, int values){
+int temp=*pos;
+temp+=3;
+if(temp<=values){
+    *pos = temp;
+}
+else{
+*pos = temp-values;
+}
+}
+
+void countTrees(int *trees){
+    int pos=-2; //läuft bei walk() immer drei Schritte, auch beim ersten mal
+    int values=31;
+
+
+    FILE *in  = fopen("input1.txt", "r");
+     if (in == NULL)
+            {
+             printf("Fehler\n");
+              exit(-1); 
+            }
+
+char line[33];
+
+//Erste Zeile einlesen
+fgets(line, 33, in);
+
+    while (strcmp(line,"NULL")){
+        walk(&pos,values);
+        if(line[pos-1]=='#'){
+        *trees=*trees+1;
+        }
+//Nächste Zeile einlesen
+        fgets(line, 33, in);
+    }
+    fclose(in);
+}
+
+
+int main(int argc , char *argv[])
+{
+    int trees=0;
+    countTrees(&trees);
+    printf("Besuchte Baeume: %d",trees);
+    return 0;
+}
