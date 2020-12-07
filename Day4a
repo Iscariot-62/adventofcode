@@ -1,0 +1,84 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdbool.h>
+
+void readLine(int *valid,int *invalid, int *eintraege){
+
+bool byr=false;
+bool iyr=false;
+bool eyr=false;
+bool hgt=false;
+bool hcl=false;
+bool ecl=false;
+bool pid=false;
+
+    FILE *in  = fopen("input1.txt", "r");
+     if (in == NULL)
+            {
+             printf("Fehler\n");
+              exit(-1);
+            }
+
+char line[100];
+char *ptr=line;
+fgets(line, 100, in);
+// ein eintrag
+    while(line[0]!='N'){
+        //lese Zeile und guck ob die Substrings enthalten sind
+        if(strstr(ptr,"byr")!=NULL){
+            byr=true;
+        }
+        if(strstr(ptr,"iyr")!=NULL){
+            iyr=true;
+        }
+        if(strstr(ptr,"eyr")!=NULL){
+            eyr=true;
+        }
+        if(strstr(ptr,"hgt")!=NULL){
+            hgt=true;
+        }
+        if(strstr(ptr,"hcl")!=NULL){
+            hcl=true;
+        }
+        if(strstr(ptr,"ecl")!=NULL){
+            ecl=true;
+        }
+        if(strstr(ptr,"pid")!=NULL){
+            pid=true;
+        }
+        //wenn ja ändere den boolean ab
+        if(line[0]=='\n'){
+            //prüfe vaiablenstatus
+            if((byr==true)&&(iyr==true)&&(eyr==true)&&(hgt==true)&&(hcl==true)&&(ecl==true)&&(pid==true)){
+                *valid=*valid+1;
+            }
+            else{
+                *invalid=*invalid+1;
+            }
+            //resete Variablen
+            byr=false;
+            iyr=false;
+            eyr=false;
+            hgt=false;
+            hcl=false;
+            ecl=false;
+            pid=false;
+            *eintraege=*eintraege+1;
+        }
+         //reset variablen inhalt und read next line
+         line[0] = '\0';
+         fgets(line, 100, in);
+}
+    fclose(in);
+}
+
+int main(int argc , char *argv[])
+{
+    int valid=0;
+    int invalid=0;
+    int eintraege=1;
+    readLine(&valid,&invalid,&eintraege);
+    printf("Valid: %d",valid);
+    return 0;
+}
