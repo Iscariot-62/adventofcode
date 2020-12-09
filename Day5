@@ -1,0 +1,77 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int checkRow(char *seat){
+    int rowMin=0;
+    int rowMax=127;
+    int i,diff;
+    for(i=0;i<7;i++){
+        if(seat[i]=='F'){
+            diff=rowMax-rowMin;
+            rowMax=rowMax-(diff/2)-1;
+        }
+        else{
+            diff=rowMax-rowMin;
+            rowMin=rowMin+(diff/2)+1;
+        }
+    }
+    if(seat[6]=='F'){
+        return rowMin;
+    }
+    else{
+        return rowMax;
+    }
+}
+
+int checkColumn(char *seat){
+    int columnMin=0;
+    int columnMax=7;
+    int i,diff;
+    for(i=7;i<10;i++){
+        if(seat[i]=='R'){
+            diff=columnMax-columnMin;
+            columnMin=columnMin+(diff/2)+1;
+        }else{
+            diff=columnMax-columnMin;
+            columnMax=columnMax-(diff/2)-1;
+        }
+    }
+    if(seat[9]=='L'){
+        return columnMin;
+    }
+    else{
+        return columnMax;
+    }
+}
+
+int read(){
+    int maxId=0;
+FILE *in  = fopen("input.txt", "r");
+     if (in == NULL)
+            {
+             printf("Fehler\n");
+              exit(-1);
+            }
+
+char line[12];
+
+//Erste Zeile einlesen
+fgets(line, 12, in);
+
+    while (strcmp(line,"NULL")){
+        int x =checkRow(line)*8+checkColumn(line);
+        if(x>maxId){
+            maxId=x;
+        }
+        fgets(line,12, in);
+    }
+    fclose(in);
+    return maxId;
+}
+
+int main()
+{
+    printf("MaxId:%d",read());
+    return 0;
+}
