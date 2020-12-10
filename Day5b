@@ -1,0 +1,99 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int checkRow(char *seat){
+    int rowMin=0;
+    int rowMax=127;
+    int i,diff;
+    for(i=0;i<7;i++){
+        if(seat[i]=='F'){
+            diff=rowMax-rowMin;
+            rowMax=rowMax-(diff/2)-1;
+        }
+        else{
+            diff=rowMax-rowMin;
+            rowMin=rowMin+(diff/2)+1;
+        }
+    }
+    if(seat[6]=='F'){
+        return rowMin;
+    }
+    else{
+        return rowMax;
+    }
+}
+
+int checkColumn(char *seat){
+    int columnMin=0;
+    int columnMax=7;
+    int i,diff;
+    for(i=7;i<10;i++){
+        if(seat[i]=='R'){
+            diff=columnMax-columnMin;
+            columnMin=columnMin+(diff/2)+1;
+        }else{
+            diff=columnMax-columnMin;
+            columnMax=columnMax-(diff/2)-1;
+        }
+    }
+    if(seat[9]=='L'){
+        return columnMin;
+    }
+    else{
+        return columnMax;
+    }
+}
+
+void read(int arr[]){
+    int arrIdx=0;
+FILE *in  = fopen("input.txt", "r");
+     if (in == NULL)
+        {
+         printf("Fehler\n");
+          exit(-1);
+        }
+
+char line[12];
+fgets(line, 12, in);
+
+    while (strcmp(line,"NULL")){
+        int x =checkRow(line)*8+checkColumn(line);
+        arr[arrIdx++]=x;
+        fgets(line,12, in);
+    }
+    fclose(in);
+}
+
+ void BubbleSort(int *a, int array_size)
+{
+    int i, j, temp;
+    for (i = 0; i < (array_size - 1); ++i)
+    {
+        for (j = 0; j < array_size - 1 - i; ++j )
+        {
+            if (a[j] > a[j+1])
+            {
+                temp = a[j+1];
+                a[j+1] = a[j];
+                a[j] = temp;
+            }
+        }
+    }
+}
+
+int main()
+{
+    int arr[757];
+    int mySeat;
+    int i;
+    read(&arr);
+    BubbleSort(&arr,757);
+    for(i=0;i<756;i++){
+        if(arr[i+1]!=arr[i]+1){
+            mySeat=arr[i]+1;
+        }
+    }
+    printf("My Seat: %d",mySeat);
+    return 0;
+}
